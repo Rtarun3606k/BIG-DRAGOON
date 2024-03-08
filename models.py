@@ -12,7 +12,8 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.Text(), nullable=False)
-    todos = db.relationship('program', backref='user', lazy=True)
+    # todos = db.relationship('program', backref='user', lazy=True)
+    todos = db.relationship('program', backref='user', lazy=True, cascade='all, delete-orphan')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

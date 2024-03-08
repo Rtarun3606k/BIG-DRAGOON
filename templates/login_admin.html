@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>BIG DRAGOON | Login</title>
+	<title>BIG DRAGOON | Login admin</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
@@ -32,14 +32,14 @@
 					<img src="/static/images/img-01.png" alt="IMG">
 				</div>
 
-				<form class="login100-form validate-form" action="/login" method="POST">
+				<form class="login100-form validate-form" action="/big_dragoon/admin" method="POST">
 					<span class="login100-form-title">
 						Member Login
 						{% with messages = get_flashed_messages() %}
                         {% if messages %}
                         {% for message in messages %}
                         
-                           <p style="color: green;"> {{message}}</p>
+                           <p style="color: red;"> {{message}}</p>
                             
                         
                        

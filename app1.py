@@ -144,8 +144,26 @@ def index():
         db.session.add(info)
         # print(info)
         db.session.commit()
+        flash(f"Dear {current_user.username} Thank you for uploading code! ")
         return redirect('/')
-  
+    flash(f"""Dear {current_user.username} Do follow these instructions!
+          
+1.Do not share sensitive information: Users should avoid sharing any personal or sensitive information in their programs or user profiles.
+
+2.Do not violate copyright or licensing: Users should refrain from uploading programs or content that infringes on copyright or licensing agreements.
+
+3.Avoid abusive language or content: Users should maintain a respectful and professional tone in their program descriptions and interactions with other users.
+
+4.Do not spam or flood the platform: Users should refrain from posting duplicate content or flooding the platform with excessive submissions.
+
+5.void malicious code: Users should not upload programs containing malicious code, viruses, or any other harmful content.
+
+6.Respect other users' privacy: Users should respect the privacy of other users and refrain from accessing or modifying other users' accounts or programs without permission.
+
+7.Follow community guidelines: Users should familiarize themselves with the platform's community guidelines and adhere to them while using the platform.
+
+8.Report inappropriate content: Users should report any inappropriate or offensive content they encounter on the platform to the administrators for review and moderation.
+""")
     allinfo = program.query.all()
     return render_template('index copy.html',todos=allinfo,name=current_user.username, current_user_id = current_user.id)
 
@@ -184,13 +202,49 @@ def update(pk):
         db.session.commit()
         return redirect('/')
     allinfo = program.query.filter_by(id=pk).first()
-    return render_template('update.html',todos=allinfo)
+    return render_template('update.html',todos=allinfo,name=current_user.username)
 
 
+@login_required
+@app.route("/Big_DRAGOON/delete/<int:pk>")
+def delete(pk):
+    info = program.query.filter_by(id=pk).first()
+    db.session.delete(info)
+    db.session.commit()
+    return redirect(url_for('admin'))
 
 
+ 
+admins_list = ['tarun@admin.com','tanmay@admin.com','ullas@admin.com','vb@admin.com','yaashwin@admin.com']  
+password_str = 'admin_site'
 
+@login_required
+@app.route("/big_dragoon/admin",methods = ['GET','POST'])
+def admin():
+    info = program.query.all()
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        if email in admins_list and password == password_str:
+            flash(f"welcome {email} be honest")
+            return render_template("admin.html" , todos =info, name=current_user.username)
+        flash(f"your password/email is not matching database try again!")
+        
+    return render_template('login_admin.html',name=current_user.username)
 
+@login_required
+@app.route("/Big_DRAGOON/admin/users", methods=['GET','POST'])
+def users_list():
+    info  = User.query.all()
+    return render_template("users.html",todos=info,name=current_user.username)
+
+@login_required
+@app.route("/Big_DRAGOON/admin/users/delete/<int:pk>")
+def delete_user(pk):
+    info = User.query.filter_by(id=pk).first()
+    db.session.delete(info)
+    db.session.commit()
+    return redirect(url_for('users_list'))
 
 
 
