@@ -13,6 +13,8 @@ from models import User, program
 import random
 import string
 
+app.config['LOGIN_URL'] = '/login'
+
 class UniqueIDGenerator:
     def __init__(self):
         self.id_count = {}
