@@ -15,5 +15,6 @@ app.secret_key = "secreate_key"
 # app.config['SQLALCHEMY_DATABASE_URI']="postgresql://r.tarunnayaka25042005:NI9Odhun6xWG@ep-delicate-resonance-a1afqwgy.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://default:aO3tn5ACpvfD@ep-wispy-art-a1doin49.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config['LOGIN_URL'] = '/login'
 
 db = SQLAlchemy(app)
