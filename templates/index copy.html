@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todo| home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <style>
+        .b1 {
+            margin-bottom: 20px;
+        }
+
+        .task {
+            font-size: 20px;
+            font-weight: bold;
+            /* color: #333; */
+        }
+
+        .show {
+            white-space: normal;
+        }
+
+        .show-more-btn {
+            margin-top: 10px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .copy-btn {
+            margin-top: -2px;
+            background-color: #008CBA;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+
+
+
+        ::placeholder {
+            color: red;
+            opacity: 1;
+            /* Firefox */
+        }
+
+        .form {
+            width: 56%;
+        }
+
+        .alt {
+
+            width: 192%;
+        }
+
+        .todo:hover .options {
+            display: block;
+        }
+
+        .options {
+            /* display: flex; */
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            margin: -4% 2%;
+            margin: 0% 3%;
+        }
+
+        .box {
+            width: 60%;
+            justify-content: center;
+            align-items: center;
+            background: #76747440;
+
+            padding: 3% 3%;
+            border-radius: 2rem;
+            transition: 500ms ease-in-out;
+            margin-top: 4%;
+            position: relative;
+            border: 2px solid #000;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .loading-line {
+            position: absolute;
+            top: -2px;
+            /* Adjust this value to match the border width */
+            left: -2px;
+            /* Adjust this value to match the border width */
+            width: 100%;
+            height: 4px;
+            /* Adjust this value to match the border width */
+            background-color: #000;
+            animation: animateLine 2s linear infinite;
+        }
+
+        .nd,
+        .box {
+            display: flex;
+
+
+
+        }
+
+
+        .box:hover {
+            transform: scale(1.04);
+        }
+
+        .details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 0%;
+            width: 100%;
+            padding: 0% 1%;
+            margin-top: -3%;
+        }
+
+        .clo {
+            background: black;
+            color: white;
+        }
+
+        .edit-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        @media screen and (max-width: 600px) {
+            .form {
+                width: 93%;
+            }
+
+            .options {
+                margin: 0 10%;
+            }
+
+            .alt {
+
+                width: 110%;
+                /* background: red; */
+            }
+
+            .btns {
+                flex-direction: row;
+                gap: 1rem;
+            }
+
+            .details {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body style="background-color: black; color: white;">
+    <nav class="navbar bg-dark border-bottom border-body " data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand">BIG DRAGOON</a>
+            <form class="d-flex" action="/search">
+                <input class="form-control me-2" type="search" name="query" placeholder="Search  program id"
+                    aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <div style="display: flex; align-items: center; justify-content: center; padding: auto;">
+                <p style="color: aliceblue; padding: 0% 12%;">Welcome home {{name}}</p>
+                <a href="/logout"><button class="btn btn-danger">logout</button></a>
+            </div>
+
+        </div>
+    </nav>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <h3></h3>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+
+
+
+
+    <div class="form" style="
+display: flex;
+justify-content: center;
+align-items: center;">
+        <form action="/home" method="POST">
+            <div class="mb-3 alt">
+                <label for="exampleFormControlInput1" class="form-label  ">Question</label>
+                <textarea type="text" class="form-control bg-dark border-bottom border-body alt" name="question"
+                    id="exampleFormControlInput1" style="color: white; @media screen and (max-width: 600px){
+                width: 135%;
+        };
+        opacity: 1;" placeholder="task"></textarea>
+            </div>
+            <div class="mb-3 alt">
+                <label for="exampleFormControlInput1" class="form-label">Solution</label>
+                <textarea style=" color: white;" type="text" class="form-control bg-dark border-bottom alt border-body"
+                    name="solution" placeholder="description"></textarea>
+            </div>
+
+
+
+
+            <button type="submit" class="btn btn-success">Upload</button>
+
+        </form>
+    </div>
+
+
+
+    <center>
+        <section class="sec">
+            {% for todo in todos | reverse %}
+
+            <div class="box" style="  padding: 3% 3%; border-radius: 2rem; flex-direction: column; ">
+
+
+                <div class="details 1st "
+                    style="display: flex; justify-content: space-between; align-items: center; height: 5%;">
+
+                    <p>date created: {{todo.date_created}}</p>
+                    <p>program id: {{todo.program_id}}</p>
+                    <div class="btns" style="display: flex; gap: 2rem;">
+                        <div>
+
+                        </div>
+                        {% if todo.user_id == current_user_id %}
+                        <div class="todo"><a href="/Big_DRAGOON/update/{{todo.id}}"><button class="btn btn-warning edit-container">edit <span><img width="25"
+                                        height="20" src="https://img.icons8.com/ios-filled/50/edit--v1.png"
+                                        alt="edit--v1" /></span> </button></a></div>
+                        {% endif %}
+                        <div class="todo"><button class="copy-btn" data-program-id="{{ todo.program_id }}">Copy Solution
+                                <span><img width="25" height="25" src="https://img.icons8.com/ios-filled/50/copy-2.png"
+                                        alt="copy-2" /></span></button></div>
+                    </div>
+
+
+                </div>
+
+                <hr style="color: white; border: 2px solid; width: 101%;">
+                <div class="nd">
+                    <div class="b1" style="text-align: left;">
+                        <h2 class="task" style="text-align: left;" data-program-id="{{ todo.program_id }}">{{
+                            todo.program_question | truncate }}</h2>
+                        <p id="solution-{{ todo.program_id }}" data-program-id="{{ todo.program_id }}">{{
+                            todo.program_solution | truncate }}</p>
+                        <button class="show-more-btn" data-program-id="{{ todo.program_id }}">Show More</button>
+
+                    </div>
+                </div>
+            </div>
+            
+            {% endfor %}
+
+
+        </section>
+    </center>
+    <footer class="dark-mode">
+        <div class="container">
+            <div class="footer-content">
+                <p>Powered by <span class="highlight">Big Dragoon Ltd</span></p>
+                <p>All rights reserved &copy; 2024</p>
+                <p>Buy me a coffee</p>
+            </div>
+        </div>
+    </footer>
+    
+
+    <style>
+        .dark-mode {
+            margin-top: 6rem;            
+            background-color: #333;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        p {
+            margin: 0;
+        }
+        
+        .highlight {
+            color: #ffcc00;
+        }
+        
+    </style>
+
+
+
+    <script>
+        function oscillateFontSize() {
+            const dynamicTexts = document.querySelectorAll('.dynamic-text');
+            let scaleFactor = 1.1; // Scale factor for increasing/decreasing font size
+
+            dynamicTexts.forEach(text => {
+                let currentSize = parseFloat(window.getComputedStyle(text).fontSize);
+
+                // Increase font size if it's less than or equal to 32px, otherwise decrease it
+                if (currentSize <= 16) {
+                    currentSize *= scaleFactor; // Increase font size
+                } else {
+                    currentSize /= scaleFactor; // Decrease font size
+                }
+
+                text.style.fontSize = currentSize + 'px';
+            });
+        }
+
+        const moreOptionsButtons = document.querySelectorAll('.more-options');
+        moreOptionsButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                button.nextElementSibling.classList.toggle('show');
+            });
+        });
+
+
+
+
+        const editContainer = document.querySelector('.edit-container');
+        const editDialogs = document.querySelectorAll('.edit-dialog');
+
+        // Function to show the edit dialog
+        function showDialog(dialog) {
+            dialog.style.display = 'block';
+        }
+
+        // Function to hide all edit dialogs
+        function hideDialogs() {
+            editDialogs.forEach(dialog => {
+                dialog.style.display = 'none';
+            });
+        }
+
+        // Event listener for dynamically generated edit buttons
+        editContainer.addEventListener('click', function (event) {
+            const editButton = event.target.closest('.edit-button');
+            if (editButton) {
+                hideDialogs();
+                const dialog = editButton.nextElementSibling;
+                showDialog(dialog);
+            }
+        });
+
+        // Hide the dialog when clicking outside any dialog
+        window.addEventListener('click', function (event) {
+            if (!event.target.closest('.edit-dialog')) {
+                hideDialogs();
+            }
+        });
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const showMoreButtons = document.querySelectorAll(".show-more-btn");
+    showMoreButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const programId = this.getAttribute("data-program-id");
+            expand(programId);
+        });
+    });
+
+    const copyButtons = document.querySelectorAll(".copy-btn");
+    copyButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const programId = this.getAttribute("data-program-id");
+            copySolution(programId);
+        });
+    });
+});
+
+function expand(programId) {
+    const solutionElement = document.querySelector(`#solution-${programId}`);
+    const showMoreButton = document.querySelector(`.show-more-btn[data-program-id="${programId}"]`);
+
+    solutionElement.classList.toggle("show");
+
+    if (solutionElement.classList.contains("show")) {
+        showMoreButton.innerText = "Show Less";
+    } else {
+        showMoreButton.innerText = "Show More";
+    }
+}
+
+function copySolution(programId) {
+    const solutionText = document.querySelector(`#solution-${programId}`).innerText;
+    navigator.clipboard.writeText(solutionText)
+        .then(() => alert("Solution copied to clipboard!"))
+        .catch(err => console.error("Unable to copy solution: ", err));
+}
+
+
+    </script>
+</body>
+
+</html>
