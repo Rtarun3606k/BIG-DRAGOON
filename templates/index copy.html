@@ -119,7 +119,7 @@
         .box {
             display: flex;
 
-
+            /* width: 100%; */
 
         }
 
@@ -278,8 +278,8 @@ align-items: center;">
                     <div class="b1" style="text-align: left;">
                         <h2 class="task" style="text-align: left;" data-program-id="{{ todo.program_id }}">{{
                             todo.program_question | truncate }}</h2>
-                        <p id="solution-{{ todo.program_id }}" data-program-id="{{ todo.program_id }}">{{
-                            todo.program_solution }}</p>
+                            <pre><p id="solution-{{ todo.program_id }}" data-program-id="{{ todo.program_id }}">{{
+                            todo.program_solution | escape}}</p></pre>
                         <button class="show-more-btn" data-program-id="{{ todo.program_id }}">Show More</button>
 
                     </div>
