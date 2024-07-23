@@ -46,7 +46,7 @@ class UniqueIDGenerator:
 
 # Example usage
 generator = UniqueIDGenerator()
-# print(generator.generate_unique_id("John"))  # Output: John_83xq
+
 
 
 
@@ -145,7 +145,7 @@ def index():
         # info=todo(todo_task=todo_task,todo_desc=todo_desc,todo_pry=pry,date_created=gettime(),user_id=current_user.id)
         info = program(program_question=question,program_solution=solution,date_created=gettime(),user_id=current_user.id,program_id=uuid)
         db.session.add(info)
-        # print(info)
+    
         db.session.commit()
         flash(f"Dear {current_user.username} Thank you for uploading code! ")
         return redirect('/')
@@ -259,14 +259,13 @@ def delete_user(pk):
 def get():
     allinfo = program.query.order_by(desc(program.date_created)).all()
     data = [{'question': i.program_question, 'solution': i.program_solution, 'date': i.date_created, 'id': i.id,'language':i.program_language } for i in allinfo]
-    for i in allinfo:
-        print(i.program_language,i.id)
+
     return jsonify(data), 200
 
 # Endpoint to get a specific program by ID
 @app.route("/v1/c/<int:id>", methods=['GET'])
 def get_id(id):
-    print("accessing..")
+   
     program_info = program.query.filter_by(id=id).first()
     if program_info:
         return jsonify({
@@ -288,7 +287,7 @@ def post():
 
     if not question or not solution or not language:
         return jsonify({'msg': 'Empty question/solution cannot be uploaded'}), 401
-    print(question,solution,language)
+   
     new_program = program(
         program_question=question,
         program_solution=solution,
